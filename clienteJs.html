@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>WPlace - Cliente Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        h1 { margin-bottom: 10px; }
+        .controls {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 2px solid #333;
+            cursor: crosshair;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        input, button { padding: 5px; margin: 0 5px; }
+    </style>
+</head>
+<body>
+    <h1>WPlace - Cliente Web (JS)</h1>
+    
+    <div class="controls">
+        <label>Cor: <input type="color" id="colorPicker" value="#000000"></label>
+        <label>Usuário: <input type="text" id="username" placeholder="Seu Nome" value="WebUser"></label>
+        <button onclick="clearBoard()" style="color: white; background-color: red; border: none; cursor: pointer;">
+            Limpar Tudo (Admin)
+        </button>
+    </div>
+
+    <canvas id="canvas" width="600" height="600"></canvas>
+    
+    <p style="font-size: 0.9em; color: #666;">Dica: Segure o clique e arraste para pintar vários pixels.</p>
+
+    <script>
+        const API_URL = "http://localhost:8000"; 
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Configurações do Board
+        const PIXEL_SIZE = 20;
+        const BOARD_WIDTH = 30;  // 30 blocos de largura
+        const BOARD_HEIGHT = 30; // 30 blocos de altura
+        
+        let isDrawing = false;
+        let lastPaintedPixel = { x: -1, y: -1 }; // Evita pintar o mesmo pixel várias vezes num movimento
+
+        // --- FUNÇÕES DE DESENHO ---
+
+        // 1. Desenha o Grid (as linhas separadoras)
+        function drawGrid() {
+            ctx.beginPath();
+            ctx.strokeStyle = "#e0e0e0"; // Cor cinza clara para o grid
+            ctx.lineWidth = 1;
+
+            // Linhas verticais
+            for (let x = 0; x <= canvas.width; x += PIXEL_SIZE) {
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+            }
+            // Linhas horizontais
+            for (let y = 0; y <= canvas.height; y += PIXEL_SIZE) {
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+            }
+            ctx.stroke();
+        }
+
+        // 2. Desenha um pixel específico
+        function drawPixel(x, y, colorHex) {
+            ctx.fillStyle = colorHex;
+            // Desenha um pouco menor (1px) para não cobrir a linha do grid
+            ctx.fillRect(x * PIXEL_SIZE + 1, y * PIXEL_SIZE + 1, PIXEL_SIZE - 2, PIXEL_SIZE - 2);
+        }
+
+        // --- COMUNICAÇÃO COM API ---
+
+        // Busca o estado atual do board (GET)
+        async function fetchBoard() {
+            try {
+                const response = await fetch(`${API_URL}/board`);
+                const pixels = await response.json();
+                
+                // Limpa e redesenha o grid base
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawGrid();
+                
+                // Desenha os pixels pintados
+                for (const key in pixels) {
+                    const p = pixels[key];
+                    const hex = rgbToHex(p.r, p.g, p.b);
+                    drawPixel(p.x, p.y, hex);
+                }
+            } catch (e) {
+                console.error("Erro ao buscar board (servidor offline?)", e);
+            }
+        }
+
+        // Envia a pintura (POST)
+        async function paint(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left) / PIXEL_SIZE);
+            const y = Math.floor((e.clientY - rect.top) / PIXEL_SIZE);
+
+            // Verifica se está dentro do board
+            if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) return;
+
+            // Otimização: Se o mouse ainda está no mesmo quadrado que acabamos de pintar, ignora
+            if (lastPaintedPixel.x === x && lastPaintedPixel.y === y) return;
+
+            // Atualiza o ultimo pixel pintado
+            lastPaintedPixel = { x, y };
+
+            // Pega dados do form
+            const colorHex = document.getElementById('colorPicker').value;
+            const rgb = hexToRgb(colorHex);
+            const owner = document.getElementById('username').value;
+
+            // Feedback visual imediato (para não esperar o servidor responder e parecer lento)
+            drawPixel(x, y, colorHex);
+
+            // Envia para o servidor
+            try {
+                await fetch(`${API_URL}/paint`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ x, y, r: rgb.r, g: rgb.g, b: rgb.b, owner })
+                });
+            } catch (error) {
+                console.error("Erro ao enviar pintura:", error);
+            }
+        }
+
+        async function clearBoard() {
+            if(confirm("Tem certeza que deseja limpar tudo?")) {
+                await fetch(`${API_URL}/clear`, { method: 'DELETE' });
+                fetchBoard();
+            }
+        }
+
+        // --- EVENTOS DO MOUSE (DRAG & DROP) ---
+
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            paint(e); // Pinta o primeiro pixel onde clicou
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDrawing) {
+                paint(e); // Continua pintando enquanto move
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDrawing = false;
+            lastPaintedPixel = { x: -1, y: -1 }; // Reseta para permitir clicar no mesmo lugar depois
+        });
+
+        // --- UTILITÁRIOS ---
+        
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function hexToRgb(hex) {
+            const bigint = parseInt(hex.slice(1), 16);
+            return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+        }
+
+        // Loop de atualização (Pooling)
+        setInterval(fetchBoard, 1000); // Atualiza a cada 1 segundo
+        
+        // Inicializa
+        drawGrid();
+        fetchBoard();
+
+    </script>
+</body>
+</html>

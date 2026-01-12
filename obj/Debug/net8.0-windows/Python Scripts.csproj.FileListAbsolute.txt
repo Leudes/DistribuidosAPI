@@ -1,0 +1,14 @@
+C:\Users\leude\Documents\Python Scripts\bin\Debug\net8.0-windows\Python Scripts.exe
+C:\Users\leude\Documents\Python Scripts\bin\Debug\net8.0-windows\Python Scripts.deps.json
+C:\Users\leude\Documents\Python Scripts\bin\Debug\net8.0-windows\Python Scripts.runtimeconfig.json
+C:\Users\leude\Documents\Python Scripts\bin\Debug\net8.0-windows\Python Scripts.dll
+C:\Users\leude\Documents\Python Scripts\bin\Debug\net8.0-windows\Python Scripts.pdb
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.AssemblyInfoInputs.cache
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.AssemblyInfo.cs
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.csproj.CoreCompileInputs.cache
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.dll
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\refint\Python Scripts.dll
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.pdb
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\Python Scripts.genruntimeconfig.cache
+C:\Users\leude\Documents\Python Scripts\obj\Debug\net8.0-windows\ref\Python Scripts.dll
