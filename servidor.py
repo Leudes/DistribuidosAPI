@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import Dict, List
 from dataclasses import asdict
 
-# Reutilizando sua lógica de negócio (simplificada para o exemplo)
+# --- Modelos de Dados ---
 class PixelData(BaseModel):
     x: int
     y: int
@@ -40,7 +40,7 @@ board = Board()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Permite qualquer origem (para desenvolvimento)
+    allow_origins=["*"],  # Permite qualquer origem
     allow_credentials=True,
     allow_methods=["*"],  # Permite GET, POST, DELETE, etc.
     allow_headers=["*"],
@@ -64,5 +64,3 @@ def paint_pixel(pixel: PixelData):
 def clear_board():
     board.clear()
     return {"status": "board cleared"}
-
-# Para rodar: uvicorn servidor_api:app --reload --host 0.0.0.0 --port 8000

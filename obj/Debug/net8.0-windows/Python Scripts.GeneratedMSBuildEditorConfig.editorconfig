@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Python_Scripts
-build_property.ProjectDir = C:\Users\leude\Documents\Python Scripts\
+build_property.ProjectDir = C:\Users\leude\Documents\GitHub\DistribuidosAPI\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

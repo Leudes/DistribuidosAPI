@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 
-// Classe simples para representar os dados (equivalente ao seu dataclass Python)
+// Modelo de Dados do Pixel
 public class PixelData {
     public int x { get; set; }
     public int y { get; set; }
@@ -133,7 +133,7 @@ public class WPlaceClient : Form {
 
     private async Task FetchBoard() {
         try {
-            // O "Black Magic" do C#: Deserializa JSON direto para Dicionário de Objetos
+            // Deserializa JSON direto para Dicionário de Objetos
             var result = await client.GetFromJsonAsync<Dictionary<string, PixelData>>($"{API_URL}/board");
             if (result != null) {
                 pixels = result;

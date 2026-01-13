@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\leude\\Documents\\Python Scripts\\Python Scripts.csproj",
+      "projectUniqueName": "C:\\Users\\leude\\Documents\\GitHub\\DistribuidosAPI\\Python Scripts.csproj",
       "projectName": "Python Scripts",
-      "projectPath": "C:\\Users\\leude\\Documents\\Python Scripts\\Python Scripts.csproj",
+      "projectPath": "C:\\Users\\leude\\Documents\\GitHub\\DistribuidosAPI\\Python Scripts.csproj",
       "packagesPath": "C:\\Users\\leude\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\leude\\Documents\\Python Scripts\\obj\\",
+      "outputPath": "C:\\Users\\leude\\Documents\\GitHub\\DistribuidosAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\leude\\AppData\\Roaming\\NuGet\\NuGet.Config"

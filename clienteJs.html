@@ -116,7 +116,7 @@
             // Verifica se está dentro do board
             if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT) return;
 
-            // Otimização: Se o mouse ainda está no mesmo quadrado que acabamos de pintar, ignora
+            // Se o mouse ainda está no mesmo quadrado que acabamos de pintar, ignora
             if (lastPaintedPixel.x === x && lastPaintedPixel.y === y) return;
 
             // Atualiza o ultimo pixel pintado
