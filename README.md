@@ -1,4 +1,4 @@
-# 🎨 WPlace - Sistema Distribuído de Pixel Art (REST API)
+# 🎨 PixelSync - Sistema Distribuído de Pixel Art (REST API)
 
 Este projeto é uma implementação de um sistema distribuído inspirada no *r/place*, onde múltiplos usuários podem pintar pixels em um quadro compartilhado em tempo real.
 
